@@ -1,25 +1,39 @@
-
+document.getElementById('error-message').style.display = 'none';
 const searchFood = () =>{
     const searchField = document.getElementById('search-field');
-    const searchText = searchField.value;
+    const searchText = searchField.value;  
     // console.log(searchText);
     // clear input value
     searchField.value = '';
+    document.getElementById('error-message').style.display = 'none';
     // load data
-    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`
+    if (searchText == ''){
 
-     fetch(url)
-    .then (res => res.json())
-    .then (data => displaySearchresult(data.meals) )
+    }
+    else{
+        const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`
+
+        fetch(url)
+       .then (res => res.json())
+       .then (data => displaySearchresult(data.meals) )
+       .catch(error => displayError(error));
+    }
 }
+
+ const displayError = error => {
+    document.getElementById('error-message').style.display = 'block';
+ }
  
 const displaySearchresult = meals =>{
     
     const searchResult = document.getElementById('search-result');
-    searchResult.innerHTML = '';
+    searchResult.textContent = '';
+    
     //for (meal of meals)
+
     meals.forEach(meal => {
         // console.log(meal);
+
         const div = document.createElement('div');
         div.classList.add('col');
         div.innerHTML = `
@@ -36,7 +50,7 @@ const displaySearchresult = meals =>{
 }
 
 const loadMealDetails = mealId =>{
-   
+    
     const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`;
     fetch (url)
     .then(res => res.json())
@@ -44,6 +58,7 @@ const loadMealDetails = mealId =>{
 }
 const displayMealDetails = meal => {
     const mealDetails = document.getElementById('meal-details');
+    mealDetails.textContent = '';
     const div = document.createElement('div');
     div.classList.add('card','mb-4');
     div.innerHTML = `
